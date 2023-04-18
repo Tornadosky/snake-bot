@@ -28,7 +28,38 @@ def download_images(query, download_folder, images_to_download):
     downloaded_images = 0
     last_scroll_height = driver.execute_script("return document.body.scrollHeight")
 
-    
+    while downloaded_images < images_to_download:
+        # Scroll down to load more images
+        ActionChains(driver).send_keys(Keys.END).perform()
+        time.sleep(2)
+
+        # Check if the scroll height has changed
+        new_scroll_height = driver.execute_script("return document.body.scrollHeight")
+        if new_scroll_height == last_scroll_height:
+            break
+        last_scroll_height = new_scroll_height
+
+        images = driver.find_elements(By.CSS_SELECTOR, "img.serp-item__thumb")
+
+        for img in images:
+            if downloaded_images >= images_to_download:
+                break
+
+            img_url = img.get_attribute("src")
+            if not img_url:
+                img_url = img.get_attribute("data-src")
+
+            if not img_url:
+                continue
+
+            try:
+                img_data = requests.get(img_url).content
+                with open(os.path.join(download_folder, f"{downloaded_images}_grasse.jpg"), "wb") as f:
+                    f.write(img_data)
+                downloaded_images += 1
+                print(f"Downloaded image {downloaded_images}: {img_url}")
+            except Exception as e:
+                print(f"Failed to download {img_url}: {e}")
 
     driver.quit()
 
