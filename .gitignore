@@ -1,0 +1,11 @@
+# Folders
+# Dependencies
+/Include
+/Lib
+/Scripts
+/share/*
+/pyvenv.cfg
+### IDE files ###
+.idea
+### ENV files ###
+.env
