@@ -7,5 +7,5 @@
 /pyvenv.cfg
 ### IDE files ###
 .idea
-### ENV files ###
-.env
+### config files ###
+config.json
