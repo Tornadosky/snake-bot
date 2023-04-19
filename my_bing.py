@@ -47,3 +47,29 @@ dir_path = "./random_images/"
 if not os.path.exists(dir_path):
     os.makedirs(dir_path)
 
+for url in contentUrls:
+    split = url.split("/")
+
+    last_item = split[-1]
+
+    second_split = last_item.split("?")
+
+    if len(second_split) > 1:
+        last_item = second_split[0]
+
+    third_split = last_item.split("!")
+
+    if len(third_split) > 1:
+        last_item = third_split[0]
+
+    print(last_item)
+    path = os.path.join(dir_path, last_item)
+
+    try:
+        with open(path, "wb") as f:
+            image_data = requests.get(url)
+            # image_data.raise_for_status()
+
+            f.write(image_data.content)
+    except OSError:
+        pass
