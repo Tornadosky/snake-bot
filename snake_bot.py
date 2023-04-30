@@ -4,7 +4,7 @@ import json
 import io
 import numpy as np
 from tensorflow import keras
-from keras.preprocessing import image
+from tensorflow.keras.preprocessing import image
 from PIL import Image
 
 # Key is stored in config.json file
@@ -13,10 +13,8 @@ BOT_TOKEN = config["BOT_TOKEN"]
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
-WELCOME_MSG = """Hello, I am Snaky. I can classify 3 species of snake if you provide me the image.
- I know vipers, grass snakes and copperheads."""
-ECHO_MSG = """I can only classify snakes in images.
- Attach an image and I'll try to understand what kind of snake it is."""
+WELCOME_MSG = """Hello, I am Snaky. I can classify 3 species of snake if you provide me the image. I know vipers, grass snakes and copperheads."""
+ECHO_MSG = """I can only classify snakes in images. Attach an image and I'll try to understand what kind of snake it is."""
 
 classes = {0: 'Natrix', 1: 'Vipera', 2: 'Coronella', 3: 'No snakes'}
 model_path = os.path.abspath(os.getcwd() + "/model")
@@ -55,9 +53,9 @@ def get_photo(message):
     file_info = bot.get_file(fileID)
     downloaded_file = bot.download_file(file_info.file_path)
 
-    answer = "It is "
     # Get a prediction from model
-    answer += predict_snake(downloaded_file)
+    predicted_snake = predict_snake(downloaded_file)
+    answer = "I see " + predicted_snake
 
     # Send an answer to the use
     bot.reply_to(message, answer)
