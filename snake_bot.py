@@ -48,6 +48,21 @@ def send_welcome(message):
     bot.reply_to(message, WELCOME_MSG)
 
 
+@bot.message_handler(content_types=['photo'])
+def get_photo(message):
+    # Get an image from chat
+    fileID = message.photo[-1].file_id
+    file_info = bot.get_file(fileID)
+    downloaded_file = bot.download_file(file_info.file_path)
+
+    answer = "It is "
+    # Get a prediction from model
+    answer += predict_snake(downloaded_file)
+
+    # Send an answer to the use
+    bot.reply_to(message, answer)
+
+
 @bot.message_handler(func=lambda msg: True)
 def echo_all(message):
     bot.reply_to(message, ECHO_MSG)
